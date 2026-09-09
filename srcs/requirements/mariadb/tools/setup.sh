@@ -1,18 +1,17 @@
 #!/bin/bash
 
-# Start the service temporarily to create the database and users
-service mariadb start
-sleep 3
+# Check if the database already exists
+if [ ! -d "/var/lib/mysql/${WORDPRESS_DATABASE_NAME}" ]; then
+    service mariadb start
+    sleep 3
 
-# Create the database and user using the variables from the .env file
-mysql -e "CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;"
-mysql -e "CREATE USER IF NOT EXISTS \`${MYSQL_USER}\`@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';"
-mysql -e "GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO \`${MYSQL_USER}\`@'%';"
-mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
-mysql -e "FLUSH PRIVILEGES;"
+    mysql -u root -e "CREATE DATABASE IF NOT EXISTS \`${WORDPRESS_DATABASE_NAME}\`;"
+    mysql -u root -e "CREATE USER IF NOT EXISTS \`${WORDPRESS_DATABASE_USER}\`@'%' IDENTIFIED BY '${WORDPRESS_DATABASE_USER_PASSWORD}';"
+    mysql -u root -e "GRANT ALL PRIVILEGES ON \`${WORDPRESS_DATABASE_NAME}\`.* TO \`${WORDPRESS_DATABASE_USER}\`@'%';"
+    mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
+    mysql -u root -e "FLUSH PRIVILEGES;"
 
-# Shut down the temporary service
-mysqladmin -u root -p${MYSQL_ROOT_PASSWORD} shutdown
+    mysqladmin -u root -p"${MYSQL_ROOT_PASSWORD}" shutdown
+fi
 
-# Start MariaDB safely in the foreground so the container stays running
 exec mysqld_safe

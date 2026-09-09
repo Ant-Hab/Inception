@@ -12,9 +12,9 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 
     # Create wp-config.php
     wp config create \
-        --dbname=$MYSQL_DATABASE \
-        --dbuser=$MYSQL_USER \
-        --dbpass=$MYSQL_PASSWORD \
+        --dbname=$WORDPRESS_DATABASE_NAME \
+        --dbuser=$WORDPRESS_DATABASE_USER \
+        --dbpass=$WORDPRESS_DATABASE_USER_PASSWORD \
         --dbhost=mariadb \
         --allow-root
 
@@ -22,17 +22,17 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     wp core install \
         --url=$DOMAIN_NAME \
         --title="Inception 42" \
-        --admin_user=$WP_ADMIN_USER \
-        --admin_password=$WP_ADMIN_PASSWORD \
-        --admin_email=$WP_ADMIN_EMAIL \
+        --admin_user=$WORDPRESS_ADMIN \
+        --admin_password=$WORDPRESS_ADMIN_PASSWORD \
+        --admin_email=$WORDPRESS_ADMIN_EMAIL \
         --allow-root
 
     # Create the regular user required by the subject
     wp user create \
-        $WP_USER \
-        $WP_EMAIL \
+        $WORDPRESS_USER \
+        $WORDPRESS_USER_EMAIL \
         --role=author \
-        --user_pass=$WP_PASSWORD \
+        --user_pass=$WORDPRESS_USER_PASSWORD \
         --allow-root
 
     echo "WordPress installed successfully!"
