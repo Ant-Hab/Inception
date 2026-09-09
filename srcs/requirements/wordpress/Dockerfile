@@ -1,26 +1,39 @@
-FROM debian:bookworm
+FROM alpine:3.23.5
 
-# Install PHP, MySQL extensions, and tools like curl/wget
-RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y php8.2 php-fpm php-mysql mariadb-client curl wget
+RUN apk add --no-cache \
+mariadb-client \
+php83 \
+php83-fpm \
+php83-phar \
+php83-curl \
+php83-mysqli \
+php83-iconv \
+php83-json \
+php83-mbstring \
+php83-xml \
+wget
 
-# Download a specific stable release of WP-CLI to bypass 429 errors
-RUN wget https://github.com/wp-cli/wp-cli/releases/download/v2.11.0/wp-cli-2.11.0.phar && \
-    chmod +x wp-cli-2.11.0.phar && \
-    mv wp-cli-2.11.0.phar /usr/local/bin/wp
+RUN ln -s /usr/bin/php83 /usr/bin/php
 
-# Configure PHP-FPM to listen on port 9000 instead of a unix socket
-RUN sed -i 's/listen = \/run\/php\/php8.2-fpm.sock/listen = 9000/g' /etc/php/8.2/fpm/pool.d/www.conf
+RUN addgroup -S www-data 2>/dev/null || true \
+&& adduser -S -D -H -s /sbin/nologin -G www-data www-data 2>/dev/null || true
 
-# Create the PID directory for PHP-FPM
-RUN mkdir -p /run/php
+RUN wget -q https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+-O /usr/local/bin/wp \
+&& chmod +x /usr/local/bin/wp
 
-# Copy the setup script
-COPY tools/setup.sh /tmp/setup.sh
-RUN chmod +x /tmp/setup.sh
+RUN printf 'memory_limit = 256M\nmax_execution_time = 120\n' \
+>> /etc/php83/php.ini
+
+COPY ./conf/www.conf /etc/php83/php-fpm.d/www.conf
+
+RUN mkdir -p /var/www/html
+
+COPY ./tools/wordpress-script.sh /usr/local/bin/wordpress-script.sh
+RUN chmod +x /usr/local/bin/wordpress-script.sh
 
 WORKDIR /var/www/html
 
 EXPOSE 9000
 
-ENTRYPOINT ["/tmp/setup.sh"]
+ENTRYPOINT ["wordpress-script.sh"]

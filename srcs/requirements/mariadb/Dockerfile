@@ -1,14 +1,13 @@
-FROM debian:bookworm
+FROM alpine:3.23.5
 
-RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y mariadb-server
+RUN apk add --no-cache mariadb mariadb-client
 
-COPY tools/setup.sh /tmp/setup.sh
-RUN chmod +x /tmp/setup.sh
+COPY ./conf/mariadb_config /etc/my.cnf.d/mariadb_config
+RUN chmod 644 /etc/my.cnf.d/mariadb_config
 
-# Allow remote connections by changing the bind-address
-RUN sed -i 's/bind-address/bind-address = 0.0.0.0 #/i' /etc/mysql/mariadb.conf.d/50-server.cnf
+COPY ./tools/mariadb-script.sh /usr/local/bin/mariadb-script.sh
+RUN chmod +x /usr/local/bin/mariadb-script.sh
 
 EXPOSE 3306
 
-ENTRYPOINT ["/tmp/setup.sh"]
+ENTRYPOINT ["mariadb-script.sh"]
