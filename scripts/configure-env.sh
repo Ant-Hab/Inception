@@ -47,8 +47,8 @@ ${ROOT_PASS}
 EOF
 
 cat > "${SECRETS_DIR}/credentials.txt" <<EOF
-WordPress admin (${LOGIN}_boss): ${ADMIN_PASS}
-WordPress user (${LOGIN}): ${USER_PASS}
+WordPress admin (${LOGIN}): ${ADMIN_PASS}
+WordPress user (${LOGIN}_user): ${USER_PASS}
 MariaDB root: ${ROOT_PASS}
 MariaDB app user (wp_db_user): ${DB_USER_PASS}
 EOF
@@ -66,11 +66,11 @@ WORDPRESS_DATABASE_NAME=wordpress_db
 WORDPRESS_DATABASE_USER=wp_db_user
 WORDPRESS_DATABASE_USER_PASSWORD=${DB_USER_PASS}
 
-WORDPRESS_ADMIN=${LOGIN}_boss
+WORDPRESS_ADMIN=${LOGIN}
 WORDPRESS_ADMIN_PASSWORD=${ADMIN_PASS}
 WORDPRESS_ADMIN_EMAIL=${LOGIN}@student.hive.fi
 
-WORDPRESS_USER=${LOGIN}
+WORDPRESS_USER=${LOGIN}_user
 WORDPRESS_USER_PASSWORD=${USER_PASS}
 WORDPRESS_USER_EMAIL=${LOGIN}.user@student.hive.fi
 
@@ -82,4 +82,4 @@ chmod 600 "$ENV_FILE"
 echo "Created ${ENV_FILE}"
 echo "Created secrets in ${SECRETS_DIR}/"
 echo "Domain: ${LOGIN}.42.fr"
-echo "Run: make LOGIN=${LOGIN} hosts && make LOGIN=${LOGIN}"
+echo "Run: make LOGIN=${LOGIN}"

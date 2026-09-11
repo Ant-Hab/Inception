@@ -1,38 +1,39 @@
 #!/bin/sh
 set -e
 
-echo "==> Setting up MariaDB..."
-
-mkdir -p /var/lib/mysql
 mkdir -p /run/mysqld
-
-chown -R mysql:mysql /var/lib/mysql /run/mysqld
-chmod 755 /run/mysqld
+chown -R mysql:mysql /run/mysqld /var/lib/mysql
 
 if [ ! -d "/var/lib/mysql/mysql" ]; then
-	echo "==> Initializing MariaDB system tables..."
+	echo "==> Initializing MariaDB..."
 
 	mariadb-install-db \
-		--basedir=/usr \
 		--user=mysql \
 		--datadir=/var/lib/mysql \
-		>/dev/null
+		--skip-test-db
 
-	echo "==> Creating database and users..."
+	echo "==> Preparing initial database configuration..."
 
-	mysqld --user=mysql --bootstrap <<EOF
-USE mysql;
-FLUSH PRIVILEGES;
+	cat > /run/mysqld/init.sql <<EOF
 ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
-CREATE DATABASE ${WORDPRESS_DATABASE_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER '${WORDPRESS_DATABASE_USER}'@'%' IDENTIFIED BY '${WORDPRESS_DATABASE_USER_PASSWORD}';
-GRANT ALL PRIVILEGES ON ${WORDPRESS_DATABASE_NAME}.* TO '${WORDPRESS_DATABASE_USER}'@'%';
+CREATE DATABASE IF NOT EXISTS \`${WORDPRESS_DATABASE_NAME}\`;
+CREATE USER IF NOT EXISTS '${WORDPRESS_DATABASE_USER}'@'%' IDENTIFIED BY '${WORDPRESS_DATABASE_USER_PASSWORD}';
+GRANT ALL PRIVILEGES ON \`${WORDPRESS_DATABASE_NAME}\`.* TO '${WORDPRESS_DATABASE_USER}'@'%';
 FLUSH PRIVILEGES;
 EOF
-else
-	echo "==> MariaDB already initialized."
+
+	chown mysql:mysql /run/mysqld/init.sql
+	chmod 600 /run/mysqld/init.sql
+
+	echo "==> Starting MariaDB for first initialization..."
+	exec mariadbd \
+		--defaults-file=/etc/my.cnf.d/mariadb_config \
+		--user=mysql \
+		--init-file=/run/mysqld/init.sql
 fi
 
 echo "==> Starting MariaDB..."
 
-exec mysqld --defaults-file=/etc/my.cnf.d/mariadb_config
+exec mariadbd \
+	--defaults-file=/etc/my.cnf.d/mariadb_config \
+	--user=mysql
