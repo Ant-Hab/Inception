@@ -1,4 +1,6 @@
 NAME = inception
+LOGIN ?= achowdhu
+DATA_DIR = /home/$(LOGIN)/data
 
 all:
 	@printf "Launch configuration ${NAME}...\n"
@@ -18,8 +20,7 @@ fclean:
 	@docker system prune --all --force --volumes
 	@docker network prune --force
 	@docker volume prune --force
-	@sudo rm -rf /home/achowdhu/data/wordpress/*
-	@sudo rm -rf /home/achowdhu/data/mariadb/*
+	@sudo rm -rf $(DATA_DIR)
 
 re: fclean all
 

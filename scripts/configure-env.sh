@@ -13,6 +13,7 @@ FIXED_PASS="${2:-}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 ENV_FILE="${ROOT}/srcs/.env"
 SECRETS_DIR="${ROOT}/secrets"
+DATA_DIR="/home/${LOGIN}/data"
 
 if [ -z "$1" ]; then
 	echo "Usage: $0 <login> [fixed_password]"
@@ -21,6 +22,7 @@ if [ -z "$1" ]; then
 	exit 1
 fi
 
+mkdir -p "${DATA_DIR}/mariadb" "${DATA_DIR}/wordpress"
 mkdir -p "$SECRETS_DIR"
 
 rand() {
@@ -81,5 +83,6 @@ chmod 600 "$ENV_FILE"
 
 echo "Created ${ENV_FILE}"
 echo "Created secrets in ${SECRETS_DIR}/"
+echo "Created data directories in ${DATA_DIR}/"
 echo "Domain: ${LOGIN}.42.fr"
 echo "Run: make LOGIN=${LOGIN}"
