@@ -34,7 +34,7 @@ for c in mariadb wordpress nginx; do
 done
 
 echo "==> Volumes"
-for v in mariadb wordpress; do
+for v in srcs_mariadb srcs_wordpress; do
 	if docker volume ls --format '{{.Name}}' | grep -qx "$v"; then
 		ok "volume $v exists"
 	else
