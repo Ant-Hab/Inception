@@ -33,14 +33,14 @@ This safely stops all running services without deleting your website data.
 
 ## 3. Accessing the Website and Administration Panel
 
-Before accessing the site, ensure your system's `/etc/hosts` file is configured to route `myli-pen.42.fr` to your local machine (`127.0.0.1` or your VM's IP).
+Before accessing the site, ensure your system's `/etc/hosts` file is configured to route `achowdhu.42.fr` to your local machine (`127.0.0.1` or your VM's IP).
 
 - **Main Website:** Open your web browser and navigate to:
-`https://myli-pen.42.fr`
+`https://achowdhu.42.fr`
 (Note: You may need to accept the self-signed certificate warning in your browser).
 
 - **Administration Panel:** To log in as the site administrator, navigate to:
-`https://myli-pen.42.fr/wp-admin`
+`https://achowdhu.42.fr/wp-admin`
 
 ## 4. Locating and Managing Credentials
 

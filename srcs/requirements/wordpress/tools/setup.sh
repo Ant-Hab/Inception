@@ -1,9 +1,9 @@
 #!/bin/sh
 
-# Gets the passwords directly from a temporary runtime file system held in RAM, which cannot be inspected
-WP_ADMIN_PASSWORD=$(cat "/run/secrets/wp_admin_password")
-WP_USER_PASSWORD=$(cat "/run/secrets/wp_user_password")
-DB_USER_PASSWORD=$(cat "/run/secrets/db_user_password")
+# Gets passwords from environment variables loaded from .env
+WP_ADMIN_PASSWORD="$WP_ADMIN_PASSWORD"
+WP_USER_PASSWORD="$WP_USER_PASSWORD"
+DB_USER_PASSWORD="$DB_USER_PASSWORD"
 
 echo "[WordPress] Waiting for MariaDB to be ready..."
 MAX_TRIES=15

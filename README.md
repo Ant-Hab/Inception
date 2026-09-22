@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by myli-pen.*
+*This project has been created as part of the 42 curriculum by achowdhu.*
 
 # Inception
 
@@ -24,7 +24,7 @@ To achieve a secure and persistent architecture, several critical design choices
 
 - **Docker Network vs Host Network:** Using the host network binds a container directly to the host machine's IP address, exposing it to port conflicts and security risks. We utilize a custom Docker Bridge Network. This creates an isolated internal LAN where containers communicate securely via internal DNS (e.g., NGINX talking directly to `wordpress:9000`). Only the NGINX container is selectively exposed to the outside world.
 
-- **Docker Volumes vs Bind Mounts:** Standard Docker volumes are managed entirely by Docker and hidden deep within the host's system files. By using explicit Bind Mounts (mapping to `/home/myli-pen/data/`), we take absolute control over data persistence. It guarantees that our database files and website uploads remain safely on the host machine's accessible hard drive, completely independent of the container's lifecycle.
+- **Docker Volumes vs Bind Mounts:** Standard Docker volumes are managed entirely by Docker and hidden deep within the host's system files. By using explicit Bind Mounts (mapping to `/home/achowdhu/data/`), we take absolute control over data persistence. It guarantees that our database files and website uploads remain safely on the host machine's accessible hard drive, completely independent of the container's lifecycle.
 
 ## 2. Instructions
 
@@ -32,7 +32,7 @@ To achieve a secure and persistent architecture, several critical design choices
 
 1. Ensure your host machine resolves the custom domain by adding the following to your `/etc/hosts` file:
 ``` bash
-127.0.0.1  myli-pen.42.fr
+127.0.0.1  achowdhu.42.fr
 ```
 
 2. Navigate to the `srcs/` directory and configure your environment:
@@ -52,7 +52,7 @@ The infrastructure is orchestrated entirely through the `Makefile` located at th
 make
 ```
 
-- To access the website, open a web browser and navigate to `https://myli-pen.42.fr`.
+- To access the website, open a web browser and navigate to `https://achowdhu.42.fr`.
 
 - To completely shut down the infrastructure and wipe all data volumes:
 ``` bash

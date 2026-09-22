@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# Gets the passwords directly from a temporary runtime file system held in RAM, which cannot be inspected
-DB_ROOT_PASSWORD=$(cat "/run/secrets/db_root_password")
-DB_USER_PASSWORD=$(cat "/run/secrets/db_user_password")
+# Gets the passwords from environment variables loaded from .env
+DB_ROOT_PASSWORD="$DB_ROOT_PASSWORD"
+DB_USER_PASSWORD="$DB_USER_PASSWORD"
 
 # Checks if db files exist in the mounted volume
 if [ ! -d "/var/lib/mysql/mysql" ]; then

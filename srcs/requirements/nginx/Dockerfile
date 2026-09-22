@@ -20,7 +20,7 @@ RUN mkdir -p /etc/nginx/ssl/certs /etc/nginx/ssl/private && \
 RUN openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:4096 \
 	-keyout /etc/nginx/ssl/private/inception.key \
 	-out /etc/nginx/ssl/certs/inception.crt \
-	-subj "/C=FI/ST=Uusimaa/L=Helsinki/O=42/OU=Student/CN=myli-pen.42.fr"
+	-subj "/C=FI/ST=Uusimaa/L=Helsinki/O=42/OU=Student/CN=achowdhu.42.fr"
 
 # Creates dir for NGINX PID file (needed by NGINX for legacy reasons)
 RUN mkdir -p /var/run/nginx

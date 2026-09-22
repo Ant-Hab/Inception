@@ -17,7 +17,7 @@ This document outlines the technical architecture, deployment process, and data 
 The host machine must route the custom domain to the local loopback or VM IP.
 Append the following to the host's `/etc/hosts` file:
 ``` bash
-127.0.0.1  myli-pen.42.fr
+127.0.0.1  achowdhu.42.fr
 ```
 
 ### Secrets and Environment Variables
@@ -88,8 +88,8 @@ docker volume inspect [volume_name]
 
 By subject requirement, data must persist even if the containers are destroyed. This is achieved using Docker bind mounts defined in `docker-compose.yml`.
 
-- **Storage Location:** All persistent data is stored directly on the host machine in the `/home/myli-pen/data/` directory.
+- **Storage Location:** All persistent data is stored directly on the host machine in the `/home/achowdhu/data/` directory.
 
-- **Database Volume (`mariadb_data`):** Bound to `/home/myli-pen/data/mariadb`. This maps to `/var/lib/mysql` inside the MariaDB container, ensuring database records survive restarts.
+- **Database Volume (`mariadb_data`):** Bound to `/home/achowdhu/data/mariadb`. This maps to `/var/lib/mysql` inside the MariaDB container, ensuring database records survive restarts.
 
-- **Web Files Volume (`wordpress_data`):** Bound to `/home/myli-pen/data/wordpress`. This maps to `/var/www/html` inside both the WordPress and NGINX containers. This shared volume ensures NGINX can serve static files directly while PHP-FPM executes the dynamic scripts.
+- **Web Files Volume (`wordpress_data`):** Bound to `/home/achowdhu/data/wordpress`. This maps to `/var/www/html` inside both the WordPress and NGINX containers. This shared volume ensures NGINX can serve static files directly while PHP-FPM executes the dynamic scripts.
